@@ -1,9 +1,61 @@
 {% extends "base.html" %}
 
+{% block title %}Standard Medical Centre{% endblock %}
 
-{% block content %} 
-<h1>Hello World</h1>
+{% block content %}
+  <nav class="navbar">
+        <div class="logo">
+            <!-- <img src="{{ url_for('static', filename='images/logo.png') }}" alt="M-Med Logo"> -->
+            <span>Standard Medical Centre</span>
+        </div>
 
+        <div class="nav-links">
+            <a href="#">Login</a>
+            <a href="#">Sign Up</a>
+     
+        </div>
+    </nav>
+
+<section class="hero-banner" >
+
+  
+  <div class="overlay"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1>Welcome to Standard Medical Centre</h1>
+      <p>Your Health, Our Happiness.</p>
+      <a href="#" class="button primary">Register Online Now</a>
+    </div>
+  </div>
+</section>
+
+<section class="info-section">
+  <h2>Our Services</h2>
+  <p>Providing trusted, compassionate care for all our patients.</p>
+</section>
+
+<section class="features">
+  <h2>Why Choose Us</h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <img src="{{ url_for('static', filename='images/heartbeat.png') }}" alt="Heart Monitor" />
+      <h3>Health Monitoring</h3>
+      <p>Track your heart rate, blood pressure, and more in real time.</p>
+    </div>
+
+    <div class="feature-card">
+      <img src="{{ url_for('static', filename='images/consult.png') }}" alt="Consultation" />
+      <h3>AI Consultations</h3>
+      <p>Instant doctor insights powered by artificial intelligence.</p>
+    </div>
+
+    <div class="feature-card">
+      <img src="{{ url_for('static', filename='images/report.png') }}" alt="Medical Report" />
+      <h3>Medical Reports</h3>
+      <p>Access your full diagnosis and treatment history anytime.</p>
+    </div>
+  </div>
+</section>
 {% endblock %}
 
 
