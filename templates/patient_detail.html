@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+
+{% block title %}Patient Details{% endblock %}
+
+{% block content %}
+
+<!-- Page heading for the patient detail view -->
+<div class="page-header">
+    <h1>👤 Patient Details</h1>
+    <p>View and update patient information</p>
+</div>
+
+<!-- Main container holding the patient information card -->
+<div class="detail-card">
+
+    <!-- Card header -->
+    <div class="card-header">
+        <h2>Patient Information</h2>
+    </div>
+
+    <!-- Form displaying editable patient fields -->
+    <!-- (POST handling is expected to be added on backend side) -->
+    <form class="detail-form">
+
+        <!-- First and Last Name fields in a row layout -->
+        <div class="form-row">
+            <div class="form-group">
+                <label for="firstname">First Name</label>
+                <!-- Splitting patient.name into first part -->
+                <input
+                    type="text"
+                    id="firstname"
+                    name="firstname"
+                    value="{{ patient.name.split()[0] if patient.name else '' }}"
+                    placeholder="Enter first name"
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="lastname">Last Name</label>
+                <!-- Splitting patient.name into last part -->
+                <input
+                    type="text"
+                    id="lastname"
+                    name="lastname"
+                    value="{{ patient.name.split()[-1] if patient.name else '' }}"
+                    placeholder="Enter last name"
+                />
+            </div>
+        </div>
+
+        <!-- Age and email fields -->
+        <div class="form-row">
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input
+                    type="number"
+                    id="age"
+                    name="age"
+                    value="{{ patient.age }}"
+                    placeholder="Enter age"
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <!-- Email disabled to prevent editing -->
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value="{{ patient.email }}"
+                    placeholder="Enter email"
+                    disabled
+                />
+            </div>
+        </div>
+
+        <!-- Address field -->
+        <div class="form-group">
+            <label for="address">Address</label>
+            <input
+                type="text"
+                id="address"
+                name="address"
+                value="{{ patient.get('address', '') }}"
+                placeholder="Enter address"
+            />
+        </div>
+
+        <!-- Action buttons -->
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Update</button>
+
+            <!-- Return to dashboard without saving -->
+            <a href="{{ url_for('dashboard') }}" class="btn-secondary">Back</a>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}
