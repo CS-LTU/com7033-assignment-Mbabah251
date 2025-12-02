@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="logo">Standard Medical Centre</div>
+  <div class="nav-links">
+    <a href="{{ url_for('login') }}" class="active">Login</a>
+    <a href="{{ url_for('signup') }}">Sign Up</a>
+  </div>
+</nav>
+
+<!-- Login Form -->
+<div class="auth-container">
+<form class="auth-form" id="loginForm" method="POST" action="{{ url_for('login') }}">
+    <h2>Welcome Back</h2>
+
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="Enter your email"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Enter your password"
+        required
+      />
+    </div>
+
+    <button type="submit" class="auth-button">Login Now</button>
+
+    <div class="auth-link">
+      <p><a href="">Forgot your password?</a></p>
+    </div>
+
+</form>
+
+</div>
+{% endblock %}

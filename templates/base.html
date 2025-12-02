@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- CSS -->
+    <!-- Link to the main stylesheet stored in the static folder -->
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
 
+    <!-- Page title; child templates can override this block -->
     <title>{% block title %}M-Med | Standard Medical Centre{% endblock %}</title>
 
 </head>
 
 <body>
 
+    <!-- Main content area; individual pages will inject their content here -->
     <main>
         {% block content %}{% endblock %}
     </main>
