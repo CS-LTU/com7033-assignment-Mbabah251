@@ -1,5 +1,30 @@
 from flask import session
 import sqlite3
+from werkzeug.security import generate_password_hash
+
+DB_PATH = "hospital.db"
+
+
+def insert_user(first_name, last_name, email, password, role):
+    """
+    Insert a new user (Doctor / Nurse / Patient etc.) into the users table.
+    Password is hashed here before saving.
+    """
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    password_hash = generate_password_hash(password)
+
+    cursor.execute(
+        """
+        INSERT INTO users (first_name, last_name, email, password_hash, role)
+        VALUES (?, ?, ?, ?, ?)
+        """,
+        (first_name, last_name, email, password_hash, role),
+    )
+
+    conn.commit()
+    conn.close()
 
 
 def get_current_user():
@@ -23,21 +48,28 @@ def get_current_user():
     return dict(user) if user else None
 
 
-def validate_if_user_exist(email):
+def validate_if_email_exist(email):
     """
-    Validate if email exist in the database
+    Validate if email exists in either the users or patients table.
+    Raises ValueError if email already registered.
     """
-    try:        
+    try:
         conn = sqlite3.connect('hospital.db')
         cursor = conn.cursor()
-        # Check if user already exists in User table by email
-        cursor.execute('''
-        SELECT 1
-        FROM users
-        WHERE email = ?
-        ''', (email,))
+
+        # Check users table
+        cursor.execute("""
+            SELECT 1 FROM users WHERE email = ?
+        """, (email,))
         if cursor.fetchone():
-            raise ValueError('Email already registered. Please use a different email')
-            
+            raise ValueError("Email already registered in users table. Please use a different email.")
+
+        # Check patients table
+        cursor.execute("""
+            SELECT 1 FROM patients WHERE email = ?
+        """, (email,))
+        if cursor.fetchone():
+            raise ValueError("Email already registered as a patient. Please use a different email.")
+
     finally:
         conn.close()

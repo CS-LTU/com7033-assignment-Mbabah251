@@ -19,10 +19,11 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Name</th>
-                    <th>Age</th>
-                    <th>Gender</th>
+                    <th>First Name</th>
+                    <th>Last NAME</th>
                     <th>Email</th>
+                    <th>Date of Birth</th>
+                    <th>Gender</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -30,11 +31,11 @@
                 {% for patient in patients %}
                 <tr>
                     <td><strong>#{{ patient.id }}</strong></td>
-                    <td>{{ patient.name }}</td>
-                    <td>{{ patient.age }}</td>
+                    <td>{{ patient.first_name }}</td>
+                    <td>{{ patient.last_name }}</td>
+                     <td>{{ patient.email }}</td>
+                    <td>{{ patient.date_of_birth }}</td>
                     <td>{{ patient.gender }}</td>
-                    <td>{{ patient.email }}</td>
-                    
                     <td>
                         <div class="actions">
                             <a href="{{ url_for('patient_detail', patient_id=patient.id) }}" class="action-link view">View</a>

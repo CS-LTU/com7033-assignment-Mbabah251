@@ -3,8 +3,6 @@
 {% block title %}Standard Medical Centre{% endblock %}
 
 {% block content %}
-
-  <!-- Main navigation bar for the homepage -->
   <nav class="navbar">
         <div class="logo">
 
@@ -22,57 +20,49 @@
     </nav>
 
 <!-- ===== Hero Banner Section ===== -->
-<!-- Large hero banner with background image and welcome message -->
+
 <section class="hero-banner" style="background: 
 url('{{ url_for('static', filename='images/doctor.png') }}')
 right center/contain no-repeat, 
  center/cover no-repeat">
-  
-  <!-- Semi-transparent overlay for readability -->
+
   <div class="overlay"></div>
 
-  <!-- Wrapper for the main banner text -->
   <div class="hero-content">
     <div class="hero-text">
       <h1>Welcome to Standard Medical Centre</h1>
       <p>Your Health, Our Happiness.</p>
 
-      <!-- CTA button to encourage new users to register -->
       <a href="{{ url_for('signup') }}" class="btn primary">Register Online Now</a>
     </div>
   </div>
 </section>
 
 <!-- ===== Info Section ===== -->
-<!-- Short text section used to introduce services or key information -->
 <section class="info-section">
   <h2>Our Services</h2>
   <p>Providing trusted, compassionate care for all our patients.</p>
 </section>
 
 <!-- ===== Features Section ===== -->
-<!-- Section highlighting three key service features -->
 <section class="features">
   <h2>Why Choose Us</h2>
 
   <!-- Grid layout for feature cards -->
   <div class="feature-grid">
 
-    <!-- Feature card 1 -->
     <div class="feature-card">
       <img src="{{ url_for('static', filename='images/heartbeat.png') }}" alt="Heart Monitor" />
       <h3>Health Monitoring</h3>
       <p>Track your heart rate, blood pressure, and more in real time.</p>
     </div>
 
-    <!-- Feature card 2 -->
     <div class="feature-card">
       <img src="{{ url_for('static', filename='images/consult.png') }}" alt="Consultation" />
       <h3>AI Consultations</h3>
       <p>Instant doctor insights powered by artificial intelligence.</p>
     </div>
 
-    <!-- Feature card 3 -->
     <div class="feature-card">
       <img src="{{ url_for('static', filename='images/report.png') }}" alt="Medical Report" />
       <h3>Medical Reports</h3>
