@@ -3,21 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Link to the main stylesheet stored in the static folder -->
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
-
-    <!-- Page title; child templates can override this block -->
     <title>{% block title %}M-Med | Standard Medical Centre{% endblock %}</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <script src="https://cdn.tailwindcss.com"></script>
 
 </head>
 
 <body>
-
-    <!-- Main content area; individual pages will inject their content here -->
     <main>
+        {%include 'component/flash.html'%}
         {% block content %}{% endblock %}
     </main>
-
 </body>
 </html>

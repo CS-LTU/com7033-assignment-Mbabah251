@@ -18,7 +18,7 @@ def login_required(view_func):
     return wrapper
 
 
-def doctore_required(func):
+def doctor_required(func):
     """
     Decorator to require 'Doctor' role for accessing a route
     Redirects to dashboard if user is not a doctor
@@ -34,4 +34,3 @@ def doctore_required(func):
             return redirect(url_for("dashboard"))
         return func(*args, **kwargs)
     return wrapper
-

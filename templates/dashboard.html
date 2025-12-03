@@ -2,27 +2,22 @@
 
 {% block title %}Dashboard - Patients{% endblock %}
 
-{% block content %}
+{% block  main_content %}
 
-<!-- Page header section showing the title and brief description -->
 <div class="page-header">
     <h1>📋 Patients</h1>
     <p>Manage and view patient information</p>
 </div>
 
-<!-- Main card that holds the patient list table -->
+
 <div class="card">
-    <!-- Card header -->
     <div class="card-header">
         <h2>Patient List</h2>
     </div>
-
-    <!-- Makes the table scrollable on smaller screens -->
     <div class="table-responsive">
         <table>
             <thead>
                 <tr>
-                    <!-- Column headings for patient details -->
                     <th>ID</th>
                     <th>Name</th>
                     <th>Age</th>
@@ -32,10 +27,8 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Loop through all patients passed from the backend -->
                 {% for patient in patients %}
                 <tr>
-                    <!-- Display individual patient details -->
                     <td><strong>#{{ patient.id }}</strong></td>
                     <td>{{ patient.name }}</td>
                     <td>{{ patient.age }}</td>
@@ -44,17 +37,13 @@
                     
                     <td>
                         <div class="actions">
-                            <!-- View button links to the detailed patient page -->
                             <a href="{{ url_for('patient_detail', patient_id=patient.id) }}" class="action-link view">View</a>
-
-                            <!-- Placeholder actions for assessment and deletion -->
                             <a href="#" class="action-link assess" onclick="alert('Assess coming soon!')">Assess</a>
                             <a href="#" class="action-link delete" onclick="alert('Delete coming soon!')">Delete</a>
                         </div>
                     </td>
                 </tr>
                 {% endfor %}
-                <!-- End of patient loop -->
             </tbody>
         </table>
     </div>

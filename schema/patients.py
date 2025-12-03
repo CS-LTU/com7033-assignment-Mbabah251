@@ -1,5 +1,4 @@
 
-import os
 import sqlite3
 
 def patients_schema():
@@ -10,15 +9,13 @@ def patients_schema():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS patients (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            age INTEGER,
+            first_name TEXT NOT NULL,
+            last_name TEXT NOT NULL,
+            date_of_birth DATE NOT NULL,
             gender TEXT,
             email TEXT,
-            phone TEXT,
-            blood_type TEXT,
-            condition TEXT,
-            last_visit TEXT,
-            status TEXT DEFAULT 'Active'
+            password_hash TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  
         )
     """)
     
