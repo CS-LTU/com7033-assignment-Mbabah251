@@ -1,53 +1,101 @@
-{% extends "pages/users/layout.html" %}
+{% extends "pages/users/layout.html" %} {% block title %}Dashboard - Patients{%
+endblock %} {% block main_content %}
 
-{% block title %}Dashboard - Patients{% endblock %}
-
-{% block  main_content %}
-
-<div class="page-header">
-    <h1>📋 Patients</h1>
-    <p>Manage and view patient information</p>
+<div class="flex items-center justify-between mb-6">
+  <div>
+    <h1 class="text-3xl font-bold flex items-center gap-2">Patients</h1>
+    <p class="text-gray-600">Manage and view patient information</p>
+  </div>
 </div>
 
+<div
+  class="bg-white shadow-md rounded-xl p-8 max-w-6xl mx-auto border border-gray-100"
+>
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-xl font-semibold">Patient List</h2>
+  </div>
 
-<div class="card">
-    <div class="card-header">
-        <h2>Patient List</h2>
-    </div>
-    <div class="table-responsive">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>First Name</th>
-                    <th>Last NAME</th>
-                    <th>Email</th>
-                    <th>Date of Birth</th>
-                    <th>Gender</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for patient in patients %}
-                <tr>
-                    <td><strong>#{{ patient.id }}</strong></td>
-                    <td>{{ patient.first_name }}</td>
-                    <td>{{ patient.last_name }}</td>
-                     <td>{{ patient.email }}</td>
-                    <td>{{ patient.date_of_birth }}</td>
-                    <td>{{ patient.gender }}</td>
-                    <td>
-                        <div class="actions">
-                            <a href="{{ url_for('patient_detail', patient_id=patient.id) }}" class="action-link view">View</a>
-                            <a href="#" class="action-link assess" onclick="alert('Assess coming soon!')">Assess</a>
-                            <a href="#" class="action-link delete" onclick="alert('Delete coming soon!')">Delete</a>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+  <div class="overflow-x-auto">
+    <table class="min-w-full text-sm">
+      <thead>
+        <tr class="bg-gray-50 border-b">
+          <th
+            class="px-4 py-3 text-left font-semibold text-gray-700 uppercase text-xs"
+          >
+            ID
+          </th>
+          <th
+            class="px-4 py-3 text-left font-semibold text-gray-700 uppercase text-xs"
+          >
+            First Name
+          </th>
+          <th
+            class="px-4 py-3 text-left font-semibold text-gray-700 uppercase text-xs"
+          >
+            Last Name
+          </th>
+          <th
+            class="px-4 py-3 text-left font-semibold text-gray-700 uppercase text-xs"
+          >
+            Email
+          </th>
+          <th
+            class="px-4 py-3 text-left font-semibold text-gray-700 uppercase text-xs"
+          >
+            Date of Birth
+          </th>
+          <th
+            class="px-4 py-3 text-left font-semibold text-gray-700 uppercase text-xs"
+          >
+            Gender
+          </th>
+          <th
+            class="px-4 py-3 text-left font-semibold text-gray-700 uppercase text-xs"
+          >
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for patient in patients %}
+        <tr class="border-b last:border-0 hover:bg-gray-50">
+          <td class="px-4 py-3 font-semibold text-gray-800">
+            #{{ patient.id }}
+          </td>
+          <td class="px-4 py-3 text-gray-800">{{ patient.first_name }}</td>
+          <td class="px-4 py-3 text-gray-800">{{ patient.last_name }}</td>
+          <td class="px-4 py-3 text-gray-800">{{ patient.email }}</td>
+          <td class="px-4 py-3 text-gray-800">{{ patient.date_of_birth }}</td>
+          <td class="px-4 py-3 text-gray-800">{{ patient.gender }}</td>
+          <td class="px-4 py-3">
+            <div class="flex items-center gap-2">
+              <a
+                href="{{ url_for('patient_detail', patient_id=patient.id) }}"
+                class="px-3 py-1 rounded-lg bg-blue-100 text-blue-700 text-xs font-medium hover:bg-blue-200 transition"
+              >
+                View
+              </a>
+              <a
+                href="#"
+                onclick="alert('Assess coming soon!')"
+                class="px-3 py-1 rounded-lg bg-green-100 text-green-700 text-xs font-medium hover:bg-green-200 transition"
+              >
+                Assess
+              </a>
+              <a
+                href="#"
+                onclick="alert('Delete coming soon!')"
+                class="px-3 py-1 rounded-lg bg-red-100 text-red-700 text-xs font-medium hover:bg-red-200 transition"
+              >
+                Delete
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 
 {% endblock %}

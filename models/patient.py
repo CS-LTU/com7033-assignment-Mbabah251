@@ -1,5 +1,6 @@
 import sqlite3
-from datetime import date
+import re
+from datetime import date, datetime
 from werkzeug.security import generate_password_hash
 
 DB_PATH = "hospital.db"
@@ -77,7 +78,7 @@ class Patient:
                 WHERE id = ?
             """, (first_name, last_name, date_of_birth, gender, id))
 
-            # No rows updated → patient does not exist
+            # No rows updated then raise patient does not exist
             if cursor.rowcount == 0:
                 conn.close()
                 raise ValueError(f"No patient found with ID {id}.")
@@ -91,3 +92,42 @@ class Patient:
 
         except sqlite3.Error as e:
             raise ValueError(f"Database error occurred: {str(e)}")
+        
+    @staticmethod
+    def validate_patient_data(email=None, date_of_birth=None, gender=None):
+        """
+        This function validates patient data if any of the fields are passed.
+        It raises ValueError with appropriate message if validation fails.
+        """
+        try:
+            conn = sqlite3.connect(DB_PATH)
+            cursor = conn.cursor()
+            
+            if email:
+                cursor.execute('''
+                SELECT 1
+                FROM patients
+                WHERE email = ?
+                ''', (email,))
+                if cursor.fetchone(): 
+                    raise ValueError('Email already registered. Please use a different email')
+                
+                # Email pattern validation
+                email_pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+                if not re.match(email_pattern, email):
+                    raise ValueError('Please enter a valid email address') 
+        
+
+            if date_of_birth:
+                # Calculate age from date_of_birth
+                dob = datetime.strptime(date_of_birth, '%Y-%m-%d').date()
+                today = date.today()
+                age = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+                if age < 0 or age > 120:
+                    raise ValueError('Age must be between 0 and 120.')
+            
+            if gender:
+                if gender not in ['Male', 'Female', 'Other']:
+                    raise ValueError('Gender must be Male, Female, or Other.')
+        finally:
+            conn.close()

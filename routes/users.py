@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
 from utils.decorators import login_required
 import sqlite3
 from utils.users_utils import get_current_user
@@ -10,13 +10,13 @@ def users_routes(app):
     @login_required
     def dashboard():
         """
-        Dashboard route - shows list of all patients ordered by date
+        Dashboard route: shows list of all patients ordered by date
         """
         conn = sqlite3.connect('hospital.db')
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
 
-        # Order by newest first (DESC). Change to ASC if you want oldest first.
+        # Order by newest first in descending order
         cursor.execute("SELECT * FROM patients ORDER BY created_at DESC")
         patients = cursor.fetchall()
 
@@ -49,3 +49,21 @@ def users_routes(app):
             "pages/users/patient_detail.html",
             patient=patient
         )
+
+    @app.route("/patient/<int:patient_id>/update", methods=['POST'])
+    @login_required
+    def update_patient_route(patient_id):
+        try:
+            first_name = request.form.get('firstname', '').strip()
+            last_name = request.form.get('lastname', '').strip()
+            date_of_birth = request.form.get('dob', '').strip()
+            gender = request.form.get('gender', '').strip()
+            
+            Patient.validate_patient_data(date_of_birth=date_of_birth, gender=gender)
+            Patient.update_patient(patient_id, first_name, last_name, date_of_birth, gender)
+            flash('Patient information updated successfully!', 'success')
+            return redirect(url_for('patient_detail', patient_id=patient_id))
+        
+        except ValueError as err:
+            flash(str(err), 'error')
+            return redirect(url_for('patient_detail', patient_id=patient_id))

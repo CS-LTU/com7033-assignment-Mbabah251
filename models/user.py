@@ -1,6 +1,4 @@
-"""
-User model - Simple data class for user information
-"""
+
 
 class User:
     """
@@ -8,13 +6,12 @@ class User:
     Data is retrieved directly from the database using raw SQL
     """
 
-    def __init__(self, id=None, full_name=None, email=None, password_hash=None, 
-                 role="Patient", created_at=None, reset_token=None, token_expiry=None):
+    def __init__(self, id=None, first_name=None, last_name=None, email=None, 
+                 password_hash=None, role=None, created_at=None):
         self.id = id
-        self.full_name = full_name
+        self.first_name = first_name
+        self.last_name = last_name
         self.email = email
         self.password_hash = password_hash
         self.role = role
         self.created_at = created_at
-        self.reset_token = reset_token
-        self.token_expiry = token_expiry
