@@ -131,3 +131,16 @@ class Patient:
                     raise ValueError('Gender must be Male, Female, or Other.')
         finally:
             conn.close()
+
+    @staticmethod
+    def delete(patient_id):
+        """
+        Delete a patient by ID.
+        """
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+
+        cursor.execute("DELETE FROM patients WHERE id = ?", (patient_id,))
+
+        conn.commit()
+        conn.close()

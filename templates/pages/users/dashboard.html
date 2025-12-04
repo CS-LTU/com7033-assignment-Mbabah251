@@ -57,7 +57,7 @@ endblock %} {% block main_content %}
         </tr>
       </thead>
       <tbody>
-        {% for patient in patients %}
+        {% if patients %} {% for patient in patients %}
         <tr class="border-b last:border-0 hover:bg-gray-50">
           <td class="px-4 py-3 font-semibold text-gray-800">
             #{{ patient.id }}
@@ -84,7 +84,7 @@ endblock %} {% block main_content %}
               </a>
               <a
                 href="#"
-                onclick="alert('Delete coming soon!')"
+                onclick="openDeleteModal('{{ patient.id }}', '{{ patient.first_name }}', '{{ patient.last_name }}')"
                 class="px-3 py-1 rounded-lg bg-red-100 text-red-700 text-xs font-medium hover:bg-red-200 transition"
               >
                 Delete
@@ -92,10 +92,85 @@ endblock %} {% block main_content %}
             </div>
           </td>
         </tr>
-        {% endfor %}
+        {% endfor %} {% else %}
+        <tr>
+          <td colspan="7" class="px-4 py-12 text-center text-gray-500">
+            <div class="flex flex-col items-center gap-2">
+              <svg
+                class="w-16 h-16 text-gray-300"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                ></path>
+              </svg>
+              <p class="text-lg font-medium">No patients found</p>
+              <p class="text-sm">
+                There are currently no patients in the system.
+              </p>
+            </div>
+          </td>
+        </tr>
+        {% endif %}
       </tbody>
     </table>
   </div>
 </div>
+
+<div
+  id="deleteModal"
+  class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+>
+  <div class="bg-white rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
+    <h3 class="text-xl font-bold mb-4 text-gray-900">Confirm Delete</h3>
+    <p class="text-gray-700 mb-6">
+      Are you sure you want to delete patient
+      <span id="patientName" class="font-semibold"></span>? This action cannot
+      be undone.
+    </p>
+    <form id="deleteForm" method="POST" action="">
+      <div class="flex gap-3 justify-end">
+        <button
+          type="button"
+          id="cancelDeleteBtn"
+          class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition font-medium"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition font-medium"
+        >
+          Delete
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function openDeleteModal(patientId, firstName, lastName) {
+    const modal = document.getElementById("deleteModal");
+    const patientName = document.getElementById("patientName");
+    const deleteForm = document.getElementById("deleteForm");
+
+    patientName.textContent = firstName + " " + lastName;
+    deleteForm.action = "/patient/" + patientId + "/delete";
+
+    modal.classList.remove("hidden");
+  }
+
+  document
+    .getElementById("cancelDeleteBtn")
+    .addEventListener("click", function () {
+      const modal = document.getElementById("deleteModal");
+      modal.classList.add("hidden");
+    });
+</script>
 
 {% endblock %}

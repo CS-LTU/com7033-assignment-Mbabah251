@@ -67,3 +67,22 @@ def users_routes(app):
         except ValueError as err:
             flash(str(err), 'error')
             return redirect(url_for('patient_detail', patient_id=patient_id))
+        
+    @app.route("/patient/<int:patient_id>/delete", methods=['POST'])
+    @login_required
+    def delete_patient_route(patient_id):
+        try:
+            
+            patient = Patient.get_by_id(patient_id)
+            
+            if not patient:
+                flash('Patient not found.', 'error')
+                return redirect(url_for('dashboard'))
+            
+            Patient.delete(patient_id)
+            flash(f'Patient deleted successfully!', 'success')
+            return redirect(url_for('dashboard'))
+
+        except Exception as err:
+            flash(f'Error deleting patient: {str(err)}', 'error')
+            return redirect(url_for('dashboard'))
