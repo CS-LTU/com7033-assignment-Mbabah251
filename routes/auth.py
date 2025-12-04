@@ -84,7 +84,7 @@ def auth_routes(app):
                 flash("An account with this email may already exist.", "danger")
                 return redirect(url_for("signup"))
 
-        return render_template("signup.html")
+        return render_template("pages/auth/signup.html")
 
 
     @app.route('/login', methods=['GET', 'POST'])
@@ -131,7 +131,7 @@ def auth_routes(app):
             flash("Email not found.", "danger")
             return redirect(url_for("login"))
 
-        return render_template("login.html")
+        return render_template("pages/auth/login.html")
 
 
     @app.route('/logout')

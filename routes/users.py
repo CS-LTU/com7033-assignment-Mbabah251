@@ -23,7 +23,7 @@ def users_routes(app):
         conn.close()
         
         return render_template(
-            "dashboard.html",
+            "pages/users/dashboard.html",
             patients=patients
         )
 
@@ -46,6 +46,6 @@ def users_routes(app):
         patient = Patient(*row)
 
         return render_template(
-            "patient_detail.html",
+            "pages/users/patient_detail.html",
             patient=patient
         )

@@ -32,7 +32,7 @@ def patient_routes(app):
         conn.close()
 
         return render_template(
-            "patient_dashboard.html",
+            "pages/patient_user/patient_dashboard.html",
             patient=patient
         )
 

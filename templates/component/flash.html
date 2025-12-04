@@ -1,6 +1,6 @@
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-        <div id="toast-container" class="toast-container">
+        <div id="toast-container" class="toast-container pointer-events-none">
             {% for category, message in messages %}
                 <div class="toast {% if category == 'danger' %} toast-error {% elif category == 'success' %} toast-success {% else %} toast-warning {% endif %} ">
                     {{ message }}
