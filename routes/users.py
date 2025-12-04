@@ -1,13 +1,13 @@
 from flask import render_template, flash, redirect, url_for, request
-from utils.decorators import login_required
+from utils.decorators import login_required, doctor_or_nurse_required, doctor_required
 import sqlite3
-from utils.users_utils import get_current_user
 from models.patient import Patient
 
 def users_routes(app):
 
     @app.route("/dashboard")
     @login_required
+    @doctor_or_nurse_required
     def dashboard():
         """
         Dashboard route: shows list of all patients ordered by date
@@ -29,6 +29,7 @@ def users_routes(app):
 
     @app.route("/patient/<int:patient_id>")
     @login_required
+    @doctor_or_nurse_required
     def patient_detail(patient_id):
 
         conn = sqlite3.connect('hospital.db')
@@ -52,6 +53,7 @@ def users_routes(app):
 
     @app.route("/patient/<int:patient_id>/update", methods=['POST'])
     @login_required
+    @doctor_or_nurse_required
     def update_patient_route(patient_id):
         try:
             first_name = request.form.get('firstname', '').strip()
@@ -70,6 +72,7 @@ def users_routes(app):
         
     @app.route("/patient/<int:patient_id>/delete", methods=['POST'])
     @login_required
+    @doctor_required
     def delete_patient_route(patient_id):
         try:
             

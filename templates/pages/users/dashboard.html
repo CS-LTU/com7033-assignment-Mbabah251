@@ -3,8 +3,15 @@ endblock %} {% block main_content %}
 
 <div class="flex items-center justify-between mb-6">
   <div>
-    <h1 class="text-3xl font-bold flex items-center gap-2">Patients</h1>
-    <p class="text-gray-600">Manage and view patient information</p>
+    <h1 class="text-2xl font-bold flex items-center gap-2">
+      Hello {% if current_user %} {{ current_user['role'] }}
+      {{current_user['first_name'] }}{% else %}User{% endif %},
+    </h1>
+    <p class="text-gray-600">
+      {% if current_user and current_user['role'] == 'Nurse' %} View and update
+      patient information {% else %} Manage and view patient information {%
+      endif %}
+    </p>
   </div>
 </div>
 
@@ -75,6 +82,7 @@ endblock %} {% block main_content %}
               >
                 View
               </a>
+              {% if current_user and current_user['role'] == 'Doctor' %}
               <a
                 href="#"
                 onclick="alert('Assess coming soon!')"
@@ -89,6 +97,7 @@ endblock %} {% block main_content %}
               >
                 Delete
               </a>
+              {% endif %}
             </div>
           </td>
         </tr>

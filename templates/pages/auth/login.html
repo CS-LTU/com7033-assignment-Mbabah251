@@ -1,8 +1,5 @@
-{% extends "base.html" %}
-
-{% block title %}Login{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Login{% endblock %} {% block content
+%}
 <nav class="navbar">
   <div class="logo">Standard Medical Centre</div>
   <div class="nav-links">
@@ -12,7 +9,12 @@
 </nav>
 
 <div class="auth-container">
-<form class="auth-form" id="loginForm" method="POST" action="{{ url_for('login') }}">
+  <form
+    class="auth-form"
+    id="loginForm"
+    method="POST"
+    action="{{ url_for('login') }}"
+  >
     <h2>Welcome Back</h2>
 
     <div class="form-group">
@@ -37,13 +39,11 @@
       />
     </div>
 
-    <button type="submit" class="auth-button">Login Now</button>
+    <button type="submit" class="auth-button !bg-[#0077b6]">Login Now</button>
 
     <div class="auth-link">
       <p><a href="">Forgot your password?</a></p>
     </div>
-
-</form>
-
+  </form>
 </div>
 {% endblock %}
