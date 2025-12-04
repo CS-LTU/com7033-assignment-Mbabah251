@@ -1,0 +1,74 @@
+{% extends "patient_layout.html" %}
+
+{% block title %}Patient Dashboard{% endblock %}
+
+{% block patient_content %}
+
+
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800">Welcome, {{ patient.first_name }}! 👋</h1>
+    <p class="text-gray-600 mt-1">Your personal health summary and assessment records</p>
+</div>
+
+<div class="bg-white shadow-md rounded-lg p-6 mb-10">
+    <h2 class="text-xl font-semibold text-blue-700 mb-4">Bio Data</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
+
+        <p><span class="font-semibold">First Name:</span> {{ patient.first_name }}</p>
+        <p><span class="font-semibold">Last Name:</span> {{ patient.last_name }}</p>
+
+        <p><span class="font-semibold">Email:</span> {{ patient.email }}</p>
+        <p><span class="font-semibold">Gender:</span> {{ patient.gender }}</p>
+
+        <p><span class="font-semibold">Date of Birth:</span> {{ patient.date_of_birth }}</p>
+
+    </div>
+</div>
+
+<div class="bg-white shadow-md rounded-lg p-6">
+
+    <h2 class="text-xl font-semibold text-blue-700 mb-4">Assessment History</h2>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-300 custom-table">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="table-head">Work Type</th>
+                    <th class="table-head">Marital Status</th>
+                    <th class="table-head">Residence Type</th>
+                    <th class="table-head">Hypertension</th>
+                    <th class="table-head">Smoking Status</th>
+                    <th class="table-head">Avg Glucose</th>
+                    <th class="table-head">BMI</th>
+                    <th class="table-head">Assessment Date</th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y divide-gray-200">
+
+                {% for record in assessments %}
+                <tr>
+                    <td class="table-cell">{{ record.work_type }}</td>
+                    <td class="table-cell">{{ record.ever_married }}</td>
+                    <td class="table-cell">{{ record.residence_type }}</td>
+                    <td class="table-cell">{{ record.hypertension }}</td>
+                    <td class="table-cell">{{ record.smoking_status }}</td>
+                    <td class="table-cell">{{ record.avg_glucose_level }}</td>
+                    <td class="table-cell">{{ record.bmi }}</td>
+                    <td class="table-cell">{{ record.created_at }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="8" class="text-center py-4 text-gray-500">
+                        No assessment records found.
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

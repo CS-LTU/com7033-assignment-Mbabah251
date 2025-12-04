@@ -46,12 +46,11 @@ def auth_routes(app):
                 if password != confirm:
                     raise ValueError("Passwords do not match.")
 
-                # Check if email already exists (in your helper)
+                # Check if email already exists
                 validate_if_email_exist(email)
 
                 # ROLE-BASED INSERT
                 if role == "Patient":
-                    # Ensure patient-specific fields
                     if not date_of_birth:
                         raise ValueError("Please provide Date of Birth for patients.")
                     if not gender:
@@ -97,25 +96,47 @@ def auth_routes(app):
             conn = sqlite3.connect('hospital.db')
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
+
+            # Check in USERS table
             cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
             user = cursor.fetchone()
+
+            # If not found, check in PATIENTS table
+            cursor.execute("SELECT * FROM patients WHERE email = ?", (email,))
+            patient = cursor.fetchone()
+
             conn.close()
 
-            #user and Verify password
-            if not user or not check_password_hash(user[4], password):
-                flash("Invalid email or password.", "danger")
-                return redirect(url_for("login"))
+            # USER LOGIN
+            if user:
+                if check_password_hash(user[4], password):
+                    session["user_id"] = user["id"]
+                    session["role"] = user["role"]
+                    flash("Login successful!", "success")
+                    return redirect(url_for("dashboard")) 
+                else:
+                    flash("Invalid password.", "danger")
+                    return redirect(url_for("login"))
 
-            # Store user id in session
-            session["user_id"] = user['id']
-            flash("Login successful!", "success")
-            return redirect(url_for("dashboard"))
+            # PATIENT LOGIN
+            if patient:
+                if check_password_hash(patient[6], password):
+                    session["patient_id"] = patient["id"]
+                    flash("Login successful!", "success")
+                    return redirect(url_for("patient_dashboard")) 
+                else:
+                    flash("Invalid password.", "danger")
+                    return redirect(url_for("login"))
+
+            flash("Email not found.", "danger")
+            return redirect(url_for("login"))
 
         return render_template("login.html")
+
 
     @app.route('/logout')
     def logout():
         # Clear all session data to log user out
         session.clear()
         flash("You have been logged out.", "info")
-        return redirect(url_for("home"))
+        return redirect(url_for("login"))

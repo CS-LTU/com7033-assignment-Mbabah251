@@ -1,22 +1,93 @@
-"""
-Patient model - Simple data class for patient information
-"""
+import sqlite3
+from datetime import date
+from werkzeug.security import generate_password_hash
+
+DB_PATH = "hospital.db"
+
 
 class Patient:
     """
-    Patient class to represent a patient in the system
-    Data is retrieved directly from the database using raw SQL
+    Patient Model representing a patient record.
+    Handles CRUD operations (Create, Read, Update).
     """
 
-    def __init__(self, id=None, name=None, age=None, gender=None, email=None, 
-                 phone=None, blood_type=None, condition=None, last_visit=None, status="Active"):
+    def __init__(self, id, first_name, last_name, date_of_birth, gender, email, password_hash, created_at):
         self.id = id
-        self.name = name
-        self.age = age
+        self.first_name = first_name
+        self.last_name = last_name
+        self.date_of_birth = date_of_birth
         self.gender = gender
         self.email = email
-        self.phone = phone
-        self.blood_type = blood_type
-        self.condition = condition
-        self.last_visit = last_visit
-        self.status = status
+        self.password_hash = password_hash
+        self.created_at = created_at
+  
+    @staticmethod
+    def get_by_id(patient_id):
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM patients WHERE id = ?", (patient_id,))
+        row = cursor.fetchone()
+        conn.close()
+
+        if not row:
+            return None
+
+        return Patient(*row)
+
+    @staticmethod
+    def insert(first_name, last_name, date_of_birth, gender, email, password):
+        """
+        Insert a new patient.
+        """
+        password_hash = generate_password_hash(password)
+
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            INSERT INTO patients (first_name, last_name, date_of_birth, gender, email, password_hash)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (first_name, last_name, date_of_birth, gender, email, password_hash),
+        )
+
+        conn.commit()
+        conn.close()
+
+
+    @staticmethod
+    def update_patient(id, first_name, last_name, date_of_birth, gender):
+        """
+        Update an existing patient's information.
+        """
+
+        # Validate required fields
+        if not first_name or not last_name or not date_of_birth or not gender:
+            raise ValueError("All fields are required. Please fill out all fields.")
+
+        try:
+            conn = sqlite3.connect("hospital.db")
+            cursor = conn.cursor()
+
+            cursor.execute("""
+                UPDATE patients
+                SET first_name = ?, last_name = ?, date_of_birth = ?, gender = ?
+                WHERE id = ?
+            """, (first_name, last_name, date_of_birth, gender, id))
+
+            # No rows updated → patient does not exist
+            if cursor.rowcount == 0:
+                conn.close()
+                raise ValueError(f"No patient found with ID {id}.")
+
+            conn.commit()
+            conn.close()
+            return True
+
+        except sqlite3.IntegrityError:
+            raise ValueError("Error while updating patient information.")
+
+        except sqlite3.Error as e:
+            raise ValueError(f"Database error occurred: {str(e)}")

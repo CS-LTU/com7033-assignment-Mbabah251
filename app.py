@@ -2,6 +2,7 @@
 from flask import Flask, render_template
 import os
 from routes.auth import auth_routes
+from routes.users import users_routes
 from routes.patient import patient_routes
 from schema.users import users_schema
 from schema.patients import patients_schema
@@ -14,6 +15,7 @@ app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret-key-change-i
 
 auth_routes(app)
 patient_routes(app)
+users_routes(app)
 
 users_schema()
 patients_schema()

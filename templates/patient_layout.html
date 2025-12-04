@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+ {% block content %}
+
+<aside class="sidebar">
+    <div class="sidebar-logo">
+        <i class="fas fa-user"></i> Bio Data
+    </div>
+
+    <ul class="sidebar-menu">
+        <li>
+            <a href="{{ url_for('patient_dashboard') }}" class="active">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+
+
+    </ul>
+
+    <div class="sidebar-footer">
+        <a href="{{ url_for('logout') }}" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+</aside>
+
+ <main class="main-content">
+        {% block  patient_content %}{% endblock %}
+    </main>
+
+
+    {% endblock %}

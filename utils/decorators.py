@@ -17,6 +17,16 @@ def login_required(view_func):
         return view_func(*args, **kwargs)
     return wrapper
 
+def patient_login_required(f):
+    """Ensures only logged-in patients can access the route."""
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if "patient_id" not in session:
+            flash("Please login to continue.", "danger")
+            return redirect(url_for("login"))
+        return f(*args, **kwargs)
+    return wrapper
+
 
 def doctor_required(func):
     """

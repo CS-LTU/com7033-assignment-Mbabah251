@@ -1038,3 +1038,20 @@ table tbody tr:hover {
     opacity: 0;
   }
 }
+
+.custom-table th,
+.custom-table td {
+    padding: 12px 8px;
+    text-align: left;
+}
+
+.table-head {
+    font-weight: 600;
+    font-size: 14px;
+    color: #374151; /* gray-700 */
+}
+
+.table-cell {
+    font-size: 14px;
+    color: #4B5563; /* gray-600 */
+}
