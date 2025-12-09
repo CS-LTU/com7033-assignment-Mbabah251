@@ -6,6 +6,7 @@ import re
 from utils.patient_utils import insert_patient
 
 
+
 def auth_routes(app):
     @app.route('/')
     def home():
@@ -72,6 +73,7 @@ def auth_routes(app):
                         password=password,
                         role=role,
                     )
+                   
 
                 flash("Account created successfully!", "success")
                 return redirect(url_for("login"))

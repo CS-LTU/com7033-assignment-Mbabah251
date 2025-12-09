@@ -4,7 +4,7 @@ class User:
     Data is retrieved directly from the database using raw SQL
     """
 
-    def _init_(self, id=None, first_name=None, last_name=None, email=None, 
+    def __init__(self, id=None, first_name=None, last_name=None, email=None, 
                  password_hash=None, role=None, created_at=None):
         self.id = id
         self.first_name = first_name

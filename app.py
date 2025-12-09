@@ -6,12 +6,18 @@ from routes.patient import patient_routes
 from schema.users import users_schema
 from schema.patients import patients_schema
 from utils.users_utils import get_current_user
+from config import Config
 
+from pymongo import MongoClient
 
+from models.mongo.patient_model import create_patient, get_patient_by_id
+
+create_patient(1)
+get_patient_by_id('69333c339f85ca17df33ebbe')
 
 app = Flask(__name__)
 
-app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret-key-change-in-production")
+app.config["SECRET_KEY"] = Config.SECRET_KEY
 
 @app.context_processor
 def inject_current_user():

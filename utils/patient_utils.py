@@ -29,6 +29,9 @@ def insert_patient(
         """,
         (first_name, last_name, date_of_birth, gender, email, password_hash),
     )
+    patient=cursor.lastrowid
+   
 
     conn.commit()
     conn.close()
+    return patient
