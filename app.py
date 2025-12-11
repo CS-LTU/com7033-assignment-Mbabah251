@@ -9,12 +9,7 @@ from schema.users import users_schema
 from schema.patients import patients_schema
 from utils.users_utils import get_current_user
 from config import Config
-from pymongo import MongoClient
-from models.mongo.patient_model import create_patient, get_patient_by_id
-
-# Initialize test data
-create_patient(1)
-get_patient_by_id('69333c339f85ca17df33ebbe')
+from seed_db_from_csv import run_seed
 
 # Create Flask app instance
 app = Flask(__name__)
@@ -24,6 +19,9 @@ app.config["SECRET_KEY"] = Config.SECRET_KEY
 
 # Enable CSRF protection on all forms
 csrf = CSRFProtect(app)
+
+# Run seeding on app startup
+run_seed()
 
 @app.template_filter("format_assessment_date")
 def format_assessment_date(date_string):
@@ -71,4 +69,4 @@ def server_error(e):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8080)

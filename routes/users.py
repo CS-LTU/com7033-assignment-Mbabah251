@@ -4,6 +4,7 @@ import sqlite3
 from models.patient import Patient
 from models.mongo.assessment_model import get_assessments_by_patient_id, create_assessment
 from utils.assessment_utils import validate_assessment_data
+from utils.pagination import get_paginated_patients
 
 def users_routes(app):
 
@@ -14,6 +15,10 @@ def users_routes(app):
         """
         Dashboard route: shows list of all patients ordered by date
         """
+        # Get pagination from query params
+        page = request.args.get('page', 1, type=int)
+        pagination = get_paginated_patients(page=page, per_page=10)
+
         conn = sqlite3.connect('hospital.db')
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
@@ -26,7 +31,12 @@ def users_routes(app):
         
         return render_template(
             "pages/users/dashboard.html",
-            patients=patients
+            patients=pagination['patients'],
+            current_page=pagination['current_page'],
+            total_pages=pagination['total_pages'],
+            total_count=pagination['total_count'],
+            has_prev=pagination['has_prev'],
+            has_next=pagination['has_next']
         )
 
     @app.route("/patient/<int:patient_id>")
