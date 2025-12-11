@@ -10,3 +10,4 @@ hospital.db
 
 venv
 app.log
+test_database.db

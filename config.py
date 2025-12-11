@@ -1,8 +1,9 @@
-
 from pathlib import Path
-
-
+from dotenv import load_dotenv
 import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 class Config:
     BASE_DIR = os.getcwd()
@@ -10,11 +11,8 @@ class Config:
     DB_PATH = os.path.join(BASE_DIR, "hospital.db")
 
     # Mongo
-    MONGO_URI = os.environ.get(
-        "MONGO_URI",
-        "mongodb+srv://ekemini_db_user:Mvik1Ux3FNj082FO@cluster0.kuiueyq.mongodb.net/?appName=Cluster0"
-    )
-    MONGO_DB = "SecureApp12"
-    MONGO_PATIENT_COL = "patients"
-
-
+    MONGO_URI = os.environ.get("MONGO_URI")
+    MONGO_DB = os.environ.get("MONGO_DB", "SecureApp12")
+    MONGO_PATIENT_COL = os.environ.get("MONGO_PATIENT_COL", "patients")
+    MONGO_EMERGENCY_CONTACT_COL = os.environ.get("MONGO_EMERGENCY_CONTACT_COL", "emergency_contacts")
+    MONGO_ASSESSMENT_COL = os.environ.get("MONGO_ASSESSMENT_COL", "assessments")

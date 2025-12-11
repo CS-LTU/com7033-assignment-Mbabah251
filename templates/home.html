@@ -1,31 +1,25 @@
-{% extends "base.html" %}
-
-{% block title %}Standard Medical Centre{% endblock %}
-
+{% extends "base.html" %} {% block title %}Standard Medical Centre{% endblock %}
 {% block content %}
-  <nav class="navbar">
-        <div class="logo">
+<nav class="navbar">
+  <div class="logo">
+    <!-- <img src="{{ url_for('static', filename='images/logo.png') }}" alt="M-Med Logo"> -->
 
-            <!-- Placeholder for a future logo image -->
-            <!-- <img src="{{ url_for('static', filename='images/logo.png') }}" alt="M-Med Logo"> -->
+    <span>Standard Medical Centre</span>
+  </div>
 
-            <span>Standard Medical Centre</span>
-        </div>
+  <div class="nav-links">
+    <a href="{{ url_for('login') }}">Login</a>
+    <a href="{{ url_for('signup') }}">Sign Up</a>
+  </div>
+</nav>
 
-        <!-- Right-side navigation links for guest users -->
-        <div class="nav-links">
-                <a href="{{ url_for('login') }}">Login</a>
-                <a href="{{ url_for('signup') }}">Sign Up</a>
-        </div>
-    </nav>
-
-<!-- ===== Hero Banner Section ===== -->
-
-<section class="hero-banner" style="background: 
-url('{{ url_for('static', filename='images/doctor.png') }}')
+<section
+  class="hero-banner"
+  style="background: 
+url('{{ url_for('static', filename='images/doctors.png') }}')
 right center/contain no-repeat, 
- center/cover no-repeat">
-
+ center/cover no-repeat"
+>
   <div class="overlay"></div>
 
   <div class="hero-content">
@@ -33,7 +27,9 @@ right center/contain no-repeat,
       <h1>Welcome to Standard Medical Centre</h1>
       <p>Your Health, Our Happiness.</p>
 
-      <a href="{{ url_for('signup') }}" class="btn primary">Register Online Now</a>
+      <a href="{{ url_for('signup') }}" class="btn primary"
+        >Register Online Now</a
+      >
     </div>
   </div>
 </section>
@@ -50,25 +46,32 @@ right center/contain no-repeat,
 
   <!-- Grid layout for feature cards -->
   <div class="feature-grid">
-
     <div class="feature-card">
-      <img src="{{ url_for('static', filename='images/heartbeat.png') }}" alt="Heart Monitor" />
+      <img
+        src="{{ url_for('static', filename='images/heartbeat.png') }}"
+        alt="Heart Monitor"
+      />
       <h3>Health Monitoring</h3>
       <p>Track your heart rate, blood pressure, and more in real time.</p>
     </div>
 
     <div class="feature-card">
-      <img src="{{ url_for('static', filename='images/consult.png') }}" alt="Consultation" />
+      <img
+        src="{{ url_for('static', filename='images/consult.png') }}"
+        alt="Consultation"
+      />
       <h3>AI Consultations</h3>
       <p>Instant doctor insights powered by artificial intelligence.</p>
     </div>
 
     <div class="feature-card">
-      <img src="{{ url_for('static', filename='images/report.png') }}" alt="Medical Report" />
+      <img
+        src="{{ url_for('static', filename='images/report.png') }}"
+        alt="Medical Report"
+      />
       <h3>Medical Reports</h3>
       <p>Access your full diagnosis and treatment history anytime.</p>
     </div>
-
   </div>
 </section>
 

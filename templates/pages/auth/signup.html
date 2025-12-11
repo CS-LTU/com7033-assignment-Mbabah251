@@ -12,6 +12,7 @@ content %}
 
 <div class="auth-container">
   <form class="auth-form" method="POST" action="{{ url_for('signup') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <h2>Join Us Today</h2>
 
     <div class="form-group flex gap-4 flex-row">

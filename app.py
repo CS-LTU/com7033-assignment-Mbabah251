@@ -1,5 +1,7 @@
 from flask import Flask, render_template, session
 import os
+from datetime import datetime
+from flask_wtf.csrf import CSRFProtect
 from routes.auth import auth_routes
 from routes.users import users_routes
 from routes.patient import patient_routes
@@ -7,17 +9,32 @@ from schema.users import users_schema
 from schema.patients import patients_schema
 from utils.users_utils import get_current_user
 from config import Config
-
 from pymongo import MongoClient
-
 from models.mongo.patient_model import create_patient, get_patient_by_id
 
+# Initialize test data
 create_patient(1)
 get_patient_by_id('69333c339f85ca17df33ebbe')
 
+# Create Flask app instance
 app = Flask(__name__)
 
+# Load SECRET_KEY from config for session security
 app.config["SECRET_KEY"] = Config.SECRET_KEY
+
+# Enable CSRF protection on all forms
+csrf = CSRFProtect(app)
+
+@app.template_filter("format_assessment_date")
+def format_assessment_date(date_string):
+    """
+    Converts date string to '10 Dec, 05:22 PM' format.
+    """
+    try:
+        dt = datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S")
+        return dt.strftime("%d %b, %I:%M %p")
+    except:
+        return date_string
 
 @app.context_processor
 def inject_current_user():
