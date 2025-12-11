@@ -130,6 +130,79 @@ endblock %} {% block main_content %}
   </div>
 </div>
 
+<!-- Pagination Controls -->
+{% if total_pages > 1 %}
+<div class="bg-white shadow-md rounded-xl p-6 max-w-6xl mx-auto border border-gray-100 mt-6">
+  <div class="flex items-center justify-between">
+    <p class="text-sm text-gray-600">
+      Showing page <span class="font-semibold text-gray-900">{{ current_page }}</span> of <span class="font-semibold text-gray-900">{{ total_pages }}</span> 
+      <span class="text-gray-500">({{ total_count }} total patients)</span>
+    </p>
+    
+    <div class="flex items-center gap-1">
+      <!-- Previous Button -->
+      {% if has_prev %}
+      <a href="{{ url_for('dashboard', page=current_page - 1) }}" 
+         class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition font-medium text-sm">
+        Previous
+      </a>
+      {% else %}
+      <button disabled 
+              class="px-3 py-2 bg-gray-100 text-gray-400 rounded-md cursor-not-allowed font-medium text-sm">
+        Previous
+      </button>
+      {% endif %}
+
+      <!-- Page Numbers -->
+      {% set start_page = [1, current_page - 2] | max %}
+      {% set end_page = [total_pages, current_page + 2] | min %}
+      
+      {% if start_page > 1 %}
+      <a href="{{ url_for('dashboard', page=1) }}"
+         class="px-2 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition text-sm">1</a>
+      {% if start_page > 2 %}
+      <span class="px-2 py-2 text-gray-500">...</span>
+      {% endif %}
+      {% endif %}
+
+      {% for page_num in range(start_page, end_page + 1) %}
+        {% if page_num == current_page %}
+        <button class="px-3 py-2 bg-blue-600 text-white rounded-md font-medium text-sm">
+          {{ page_num }}
+        </button>
+        {% else %}
+        <a href="{{ url_for('dashboard', page=page_num) }}"
+           class="px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition text-sm">
+          {{ page_num }}
+        </a>
+        {% endif %}
+      {% endfor %}
+
+      {% if end_page < total_pages %}
+      {% if end_page < total_pages - 1 %}
+      <span class="px-2 py-2 text-gray-500">...</span>
+      {% endif %}
+      <a href="{{ url_for('dashboard', page=total_pages) }}"
+         class="px-2 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition text-sm">{{ total_pages }}</a>
+      {% endif %}
+
+      <!-- Next Button -->
+      {% if has_next %}
+      <a href="{{ url_for('dashboard', page=current_page + 1) }}"
+         class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-medium text-sm">
+        Next
+      </a>
+      {% else %}
+      <button disabled 
+              class="px-3 py-2 bg-gray-100 text-gray-400 rounded-md cursor-not-allowed font-medium text-sm">
+        Next
+      </button>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
 <div
   id="deleteModal"
   class="hidden fixed inset-0 bg-black bg-opacity-50 z-[9999] flex items-center justify-center"
@@ -142,6 +215,7 @@ endblock %} {% block main_content %}
       be undone.
     </p>
     <form id="deleteForm" method="POST" action="">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <div class="flex gap-3 justify-end">
         <button
           type="button"
@@ -176,6 +250,7 @@ endblock %} {% block main_content %}
     </p>
 
     <form id="assessForm" method="POST" action="">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label class="block text-sm font-medium mb-1">Hypertension</label>

@@ -130,6 +130,7 @@ Dashboard{% endblock %} {% block patient_content %}
   <div class="bg-white rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
     <h3 class="text-xl font-bold mb-4 text-gray-900">Edit Emergency Contact</h3>
     <form id="editContactForm" method="POST" action="">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <div class="grid grid-cols-2 gap-4 mb-4">
         <div>
           <label class="block text-sm font-medium mb-1">First Name</label>
@@ -211,6 +212,7 @@ Dashboard{% endblock %} {% block patient_content %}
       cannot be undone.
     </p>
     <form id="deleteContactForm" method="POST" action="">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <div class="flex gap-3 justify-end">
         <button
           type="button"
@@ -338,6 +340,7 @@ Dashboard{% endblock %} {% block patient_content %}
       method="POST"
       action="{{ url_for('add_emergency_contact') }}"
     >
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <div class="grid grid-cols-2 gap-4 mb-4">
         <div>
           <label class="block text-sm font-medium mb-1">First Name</label>
