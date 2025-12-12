@@ -20,8 +20,7 @@ app.config["SECRET_KEY"] = Config.SECRET_KEY
 # Enable CSRF protection on all forms
 csrf = CSRFProtect(app)
 
-# Run seeding on app startup
-run_seed()
+
 
 @app.template_filter("format_assessment_date")
 def format_assessment_date(date_string):
@@ -48,7 +47,8 @@ users_routes(app)
 
 users_schema()
 patients_schema()
-
+# Run seeding after patient and user schemas are created
+run_seed()
 
 @app.errorhandler(404)
 def not_found(e):

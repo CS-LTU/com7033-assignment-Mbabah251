@@ -14,7 +14,7 @@ load_dotenv()
 
 INPUT_CSV = "healthcare-dataset-stroke-data.csv"
 OUTPUT_CSV = "healthcare_stroke_with_fake_names.csv"
-MAX_ROWS = 1500
+MAX_ROWS = 1000
 SQLITE_DB_PATH = "hospital.db"
 
 
