@@ -1,121 +1,186 @@
 # Hospital Management System
 
-A Flask-based web application for managing patient records and user authentication in a healthcare environment.
+A practical, security-aware Flask application for storing and viewing patient demographics, emergency contacts and clinical assessments. 
 
-## Features
+This README uses compact tables for clarity and quick reference.
 
-- User authentication (Doctor, Nurse, Patient roles)
-- Patient data management with CRUD operations
-- SQLite for user authentication
-- MongoDB for patient records
-- Role-based access control
-- CSRF protection
-- Password hashing with werkzeug
-- Input validation and sanitization
+---
 
-## Installation
+## Quick links
 
-### Requirements
-- Python 3.8+
-- SQLite3
-- MongoDB
+| Section | Purpose |
+|--------:|:--------|
+| Quick start | Run locally in minutes |
+| Architecture | High-level design |
+| Routes | What endpoints exist and who can use them |
+| Security | Validation and protection highlights |
+| Dev & Tests | Seed, run, and test notes |
+| Layout | Where to find code |
 
-### Setup
+---
 
-1. Clone the repository
+## Quick start (fast path)
+
+1. Clone
 ```bash
-git clone <repository-url>
+git clone https://github.com/CS-LTU/com7033-assignment-Mbabah251.git
 cd com7033-assignment-Mbabah251
 ```
 
-2. Install dependencies
+2. Virtual environment & install
 ```bash
+python -m venv venv
+# macOS / Linux
+source venv/bin/activate
+# Windows (PowerShell)
+venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
 
-3. Configure environment variables
-Create a `.env` file in the root directory:
-```
-SECRET_KEY=your-secret-key-here
-MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/
-MONGO_DB=SecureApp12
+3. Configure environment (`.env`)
+
+| Variable | Required | Example / Notes |
+|:--------|:--------:|:----------------|
+| SECRET_KEY | Yes | replace_with_a_secure_value |
+| MONGO_URI | Yes | mongodb+srv://user:pass@cluster.mongodb.net/ |
+| MONGO_DB | Yes | hospital |
+| PATIENT_COLLECTION | No (default) | patients |
+| ASSESSMENT_COLLECTION | No (default) | assessments |
+| EMERGENCY_CONTACT_COLLECTION | No (default) | emergency_contacts |
+
+4. Seed local data
+```bash
+python seed_db_from_csv.py
 ```
 
-4. Run the application
+5. Run
 ```bash
 python app.py
 ```
+Default host/port: http://localhost:8080 (adjust in app config if needed)
 
-The app will run on `http://localhost:5000`
+---
 
-## Project Structure
+## Project snapshot
 
-```
-├── app.py                 # Main Flask application
-├── config.py             # Configuration settings
-├── requirements.txt      # Project dependencies
-├── routes/               # Route handlers
-│   ├── auth.py          # Authentication routes
-│   ├── users.py         # User management routes
-│   └── patient.py       # Patient management routes
-├── models/              # Database models
-│   ├── user.py
-│   ├── patient.py
-│   └── mongo/          # MongoDB models
-├── templates/          # HTML templates
-├── static/             # CSS and static files
-├── utils/              # Utility functions
-└── test.py            # Unit tests
-```
+| Area | Summary |
+|------|---------|
+| Backend | Flask (Python 3.8+), server-rendered Jinja2 templates |
+| Styling | Tailwind CSS (static prebuilt file included) |
+| Auth store | SQLite (users, roles) |
+| Clinical data | MongoDB (assessments, emergency contacts) |
+| Forms / CSRF | Flask-WTF (CSRF tokens) |
+| Tests / Tools | unittest, Faker, pandas (seed utilities) |
 
-## Usage
+---
 
-### User Registration
-1. Navigate to `/signup`
-2. Select your role (Doctor, Nurse, or Patient)
-3. Fill in required information
-4. Create account with strong password (8+ chars, uppercase, lowercase, digit, special char)
+## High-level architecture
 
-### Login
-1. Go to `/login`
-2. Enter email and password
-3. Access dashboard based on your role
+| Layer | Responsibilities |
+|:------|:-----------------|
+| Presentation | Jinja2 templates, server-rendered forms, static assets |
+| Application | Flask routes, RBAC decorators, business logic |
+| Data | SQLite for auth/registry; MongoDB for clinical documents |
 
-### Patient Management
-- View patient records
-- Add new patient information
-- Update existing records
-- Delete records (Doctor only)
+---
 
-## Security Features
+## Routes - common workflows
 
-- **CSRF Protection**: All forms are protected against Cross-Site Request Forgery attacks
-- **Password Hashing**: Passwords are hashed using werkzeug.security
-- **Input Validation**: Email format and password strength validation
-- **Database Separation**: User auth in SQLite, patient data in MongoDB
-- **Role-Based Access**: Different permissions for Doctor, Nurse, and Patient roles
+(Note: all modifying endpoints use POST with CSRF protection. See `routes/` for handler names.)
 
-## Testing
+| Area | Method | Route | Access | Purpose / Required fields |
+|:----:|:------:|:-----|:------:|:-------------------------|
+| Auth | GET | `/` | Public | Landing / login page |
+| Auth | POST | `/login` | Public | Authenticate (email, password) |
+| Auth | GET | `/signup` | Public | Registration page |
+| Auth | POST | `/signup` | Public | Create user (first_name, last_name, email, password, role, patient fields) |
+| Auth | GET | `/logout` | Authenticated | Logout (clear session) |
+| Dashboard | GET | `/dashboard` | Doctor/Nurse | Paginated patient list (page param) |
+| Patient | GET/POST | `/patient/add` | Doctor/Nurse | Create patient (first_name, last_name, dob, gender, email, password) |
+| Patient | GET | `/patient/<id>` | Doctor/Nurse | View patient details & assessments |
+| Patient | POST | `/patient/<id>/update` | Doctor/Nurse | Update patient demographics |
+| Patient | POST | `/patient/<id>/delete` | Doctor only | Delete patient record |
+| Assessment | POST | `/patient/<id>/assess` | Doctor only | Create health assessment (age, bmi, hypertension, heart_disease, smoking_status, stroke_risk) |
+| Emergency | GET/POST | `/patient/emergency-contact/add` | Patient | Add contact (first_name, last_name, phone_number, relationship) |
+| Emergency | POST | `/patient/emergency-contact/<contact_id>/update` | Patient | Update contact |
+| Emergency | POST | `/patient/emergency-contact/<contact_id>/delete` | Patient | Delete contact |
 
-Run unit tests:
-```bash
-python test.py
-```
+---
 
-Tests cover:
-- User creation and authentication
-- Database operations
-- Route functionality
-- Error handling
+## Input validation & examples
 
-## Technologies Used
+| Field | Validation |
+|:------|:-----------|
+| Email | RFC-style regex: `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$` |
+| Password | Minimum 8 chars; recommend mixed case, digit, special char (`^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$`) |
+| Age | Integer, 0–120 |
+| BMI | Float, sensible range (e.g., 10–100) |
+| Glucose | Float, 0–500 |
 
-- Flask 3.1.2
-- SQLite
-- MongoDB
-- Flask-WTF (CSRF protection)
-- Werkzeug (password hashing)
+Quick test example (create patient via form fields):
+- Required POST fields: first_name, last_name, date_of_birth (YYYY-MM-DD), gender, email, password
 
-## License
+---
 
-Created for COM7033 Secure Software Development assignment
+## Security highlights
+
+| Control | Purpose |
+|:-------|:--------|
+| Password hashing (Werkzeug/bcrypt) | Protect stored credentials |
+| CSRF (Flask-WTF) | Protect POST endpoints |
+| Session-based auth | Simple server-side sessions storing minimal identifiers |
+| Parameterized SQLite queries | Prevent SQL injection |
+| Input sanitization for MongoDB | Reduce NoSQL injection risk |
+| Decorator-based RBAC | Enforce least-privilege in routes |
+| Custom error pages | Avoid leaking stack traces to users |
+
+---
+
+## Developer notes & testing
+
+| Action | Command / Notes |
+|:------|:----------------|
+| Run app | `python app.py` |
+| Run tests | `python test.py -v` (ensure `.env` set; seed DB if tests need data) |
+| Seed data | `python seed_db_from_csv.py` (see schema/ and data/ for CSV sources) |
+| Templates | `templates/` — main layout: `templates/base.html` |
+| Helpers | `utils/` contains decorators, sanitizers, and validation helpers |
+
+Testing notes:
+- Tests cover authentication, core routes, and basic DB ops. Add tests for new features and edge cases.
+
+---
+
+## Project layout ( high level )
+
+| Path | Purpose |
+|:-----|:--------|
+| app.py | App entry point and server start |
+| config.py | Configuration and environment handling |
+| routes/ | Route handlers: auth.py, users.py, patient.py |
+| models/ | SQLite and MongoDB model helpers |
+| schema/ | DB initialization scripts |
+| templates/ | Jinja2 templates and layouts |
+| static/ | Tailwind CSS and static assets |
+| utils/ | Decorators, validators, sanitizers |
+| seed_db_from_csv.py | Seeding utility |
+| test.py | Unit tests |
+
+---
+
+## Author & context
+
+| Field | Value |
+|:-----|:------|
+| Author | Ekemini Mbabah |
+| Course / Purpose | COM7033 - Secure Software Development (educational) |
+| Last updated | 2025-12-12 |
+
+---
+
+If you'd like, I can:
+- Apply one more pass to add a small sample MongoDB document (assessment JSON) or an ERD table;
+- Add a short "How to change port" snippet that shows how to set FLASK_RUN_PORT or edit app config;
+- Commit this README on a new branch and open a PR for you to review (suggested branch: `readme/refactor-unique`).
+
+Which of these (if any) would you like me to do next?
