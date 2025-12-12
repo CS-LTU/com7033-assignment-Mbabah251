@@ -33,7 +33,7 @@ python -m venv venv
 # macOS / Linux
 source venv/bin/activate
 # Windows (PowerShell)
-venv\Scripts\Activate
+source venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
@@ -48,12 +48,8 @@ pip install -r requirements.txt
 | ASSESSMENT_COLLECTION | No (default) | assessments |
 | EMERGENCY_CONTACT_COLLECTION | No (default) | emergency_contacts |
 
-4. Seed local data
-```bash
-python seed_db_from_csv.py
-```
 
-5. Run
+4. Run (This will also seed the database)
 ```bash
 python app.py
 ```
@@ -176,11 +172,4 @@ Testing notes:
 | Course / Purpose | COM7033 - Secure Software Development (educational) |
 | Last updated | 2025-12-12 |
 
----
 
-If you'd like, I can:
-- Apply one more pass to add a small sample MongoDB document (assessment JSON) or an ERD table;
-- Add a short "How to change port" snippet that shows how to set FLASK_RUN_PORT or edit app config;
-- Commit this README on a new branch and open a PR for you to review (suggested branch: `readme/refactor-unique`).
-
-Which of these (if any) would you like me to do next?
